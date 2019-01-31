@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @EnableAutoConfiguration
@@ -27,21 +30,29 @@ public class GoodsController {
 
     @PostMapping(value="/list")
     public String list(){
-        List<Goods> list = goodsService.getGoodsList();
-        String sGoodsJson = JSON.toJSONString(list);
-        return "data:" + sGoodsJson;
+        //返回页面的JSON
+        Map result = new HashMap();
+        try {
+            //获取数据
+            List<Goods> goodsList = goodsService.getGoodsList();
+            result.put("data", goodsList);
+            result.put("state", "success");
+        } catch (Exception e){
+            result.put("state", "error");
+        }
+        return JSON.toJSONString(result);
     }
 
     @PostMapping(value = "/add")
     public String add(Goods goods){
         goodsService.saveGoods(goods);
-        return "data:" + goods.getId();
+        return "\"data\":" + goods.getId();
     }
 
     @PostMapping(value = "/edit")
     public String edit(Goods goods){
         goodsService.edit(goods);
-        return "success";
+        return "\"success\"";
     }
 
 }

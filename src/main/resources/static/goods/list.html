@@ -57,14 +57,15 @@
                 //去转义
                 data = data.replace(/\\/g, '\\\\');
                 //转换成Json
-                var list = JSON.parse(data);
+                data = JSON.parse(data);
+                var list = data.data;
                 var len = list.length;
                 var html = "";
                 if(len != 0){
                     for(var i=0;i<len;i++){
                         html += "<tr><td>"+ list[i].goodsCode +"</td>"//商品编码
                             +"<td>"+ list[i].goodsName +"</td>"//商品名称
-                            +"<td></td></tr>";//操作
+                            +"<td><a href='javascript:void(0);'>编辑</a></td></tr>";//操作
                     }
                 }else {
 
