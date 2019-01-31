@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.ars.demo.dao.GoodsDao">
+
+    <resultMap id="GoodsMap" type="com.ars.demo.domain.Goods">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <id column="goodsCode" property="goods_code" jdbcType="VARCHAR" />
+        <id column="goodsName" property="goods_name" jdbcType="VARCHAR" />
+        <id column="delete" property="delete" jdbcType="INTEGER" />
+    </resultMap>
+
+    <!--<select id="getGoodsList" resultType="java.util.HashMap">-->
+		<!--SELECT * FROM goods_info-->
+	<!--</select>-->
+
+</mapper>

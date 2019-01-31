@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>商品主页</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- jquery -->
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <div>商品主页</div>
+    <div>
+        <!--操作-->
+        <div>
+            <div>
+                <input type="text" id="input-search">
+                <input type="button" id="input-query-goods" value="Query">
+            </div>
+            <div>
+                <input type="text" id="input-add-goods-code">
+                <input type="text" id="input-add-goods-name">
+                <input type="button" id="input-add-goods" value="Add">
+            </div>
+        </div>
+        <!--列表-->
+        <table style="background-color: pink;">
+            <thead>
+                <tr>
+                    <td>商品编码</td>
+                    <td>商品名称</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <tbody id="goods-list">
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+
+    getGoodsList();
+
+    $("#input-query-goods").click(function(){
+        getGoodsList();
+    });
+
+    $("#input-add-goods").click(function(){
+        addGoods();
+    });
+
+    function getGoodsList(){
+        $.ajax({
+            type:"post",
+            url:"/goods/list",
+            data:{},
+            async: true,
+            success:function (data) {
+                //去转义
+                data = data.replace(/\\/g, '\\\\');
+                //转换成Json
+                var list = JSON.parse(data);
+                var len = list.length;
+                var html = "";
+                if(len != 0){
+                    for(var i=0;i<len;i++){
+                        html += "<tr><td>"+ list[i].goodsCode +"</td>"//商品编码
+                            +"<td>"+ list[i].goodsName +"</td>"//商品名称
+                            +"<td></td></tr>";//操作
+                    }
+                }else {
+
+                }
+                $('#goods-list').html(html);
+            },
+            error:function (data) {
+                console.log("error:" + data);
+            }
+        });
+    }
+
+    function addGoods(){
+        var goodsCode = $("#input-add-goods-code").val();
+        var goodsName = $("#input-add-goods-name").val();
+        if(goodsCode==null || goodsCode == ""){
+            alert("Goods code can not be empty");
+        }else if(goodsName==null || goodsName == "") {
+            alert("Goods name can not be empty");
+        }else {
+            $.ajax({
+                type:"post",
+                url:"/goods/add",
+                data:{
+                    goodsCode: goodsCode,
+                    goodsName: goodsName
+                },
+                success:function(data){
+                    console.log("addGoods() success:"+JSON.stringify(data));
+                    getGoodsList();
+                },
+                error:function(data){
+                    console.log("addGoods() error:"+JSON.stringify(data));
+                }
+            });
+        }
+    }
+
+</script>
+</html>
