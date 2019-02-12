@@ -2,14 +2,13 @@ package com.ars.demo.domain;
 
 import lombok.Data;
 
-import java.math.BigInteger;
-
 @Data
 public class User {
 
-    private BigInteger id;
+    private long id;
     private String nickName;
     private String userName;
     private int userType;
+    private int delete;
 
 }

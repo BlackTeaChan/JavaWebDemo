@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <!-- jquery -->
+    <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+    <style>
+        #table-user{
+            background-color: pink;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div>用户</div>
+    <div>
+        <!--操作-->
+        <div>
+            <div>
+                <input type="text" id="input-search">
+                <input type="button" id="input-query-user" value="Query">
+            </div>
+        </div>
+        <!--列表-->
+        <table id="table-user">
+            <thead>
+                <tr>
+                    <td>用户ID</td>
+                    <td>昵称</td>
+                    <td>用户名</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <tbody id="user-list">
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+
+    getUserList();
+
+    $("#input-query-user").click(function(){
+        var searchText = $("#input-search").val();
+        getUserList(searchText)
+    });
+
+    function getUserList(searchText){
+        var data = {};
+        if(searchText != undefined){
+            data.searchText = searchText;
+        }
+        $.ajax({
+            type:"post",
+            url:"/user/list",
+            data:data,
+            async: true,
+            success:function (data) {
+                //去转义
+                data = data.replace(/\\/g, '\\\\');
+                //转换成Json
+                data = JSON.parse(data);
+                var list = data.data;
+                var len = list.length;
+                var html = "";
+                if(len != 0){
+                    for(var i=0;i<len;i++){
+                        html += "<tr><td>"+ list[i].id +"</td>"//用户ID
+                            +"<td>"+ list[i].nickName +"</td>"//昵称
+                            +"<td>"+ list[i].userName +"</td>"//用户名
+                            +"<td><a href='javascript:void(0);'>编辑</a></td></tr>";//操作
+                    }
+                }else {
+
+                }
+                $('#user-list').html(html);
+            },
+            error:function (data) {
+                console.log("error:" + JSON.stringify(data));
+            }
+        });
+    }
+</script>
+</html>

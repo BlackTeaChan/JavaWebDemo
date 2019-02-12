@@ -45,6 +45,8 @@ public class GoodsController {
 
     @PostMapping(value = "/add")
     public String add(Goods goods){
+        //传参（key，是否必传）变量类型 变量名
+        //@RequestParam(value = "testParam",required = false) String test
         goodsService.saveGoods(goods);
         return "\"data\":" + goods.getId();
     }
